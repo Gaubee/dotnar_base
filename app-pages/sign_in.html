@@ -1,0 +1,40 @@
+<div class="sign">
+    <div class="sign_in {{loginType||'focus'}}">
+        <div class="inputform">
+            <div class="inbox">
+                <L:input bind-input="{{'$Cache.admin.name'}}" value="{{$Cache.admin.name}}" placeholder="请输入用户名/手机号"></L:input>
+                <L:input bind-input="{{'$Cache.admin.password'}}" value="{{$Cache.admin.password}}" placeholder="请输入密码" type="password" event-enter="{{'$Event.admin.login'}}"></L:input>
+            </div>
+        </div>
+        <div class="readbox">
+            <sbutton shadownum1="0 0 15px 4px" shadownum2="0 0 10px 1px" class="btn" text="登陆" event-click="{{'$Event.admin.login'}}"></sbutton>
+            <div class="item"><a event-click="{{'$Event.changeLoginType'}}">切换买家登陆</a>
+            </div>
+        </div>
+    </div>
+    <div class="sign_in">
+        <div class="inputform {{signPrivate}}">
+            <div class="inbox">
+                <L:input bind-input="{{'$Cache.sign_in.name'}}" value="{{$Cache.sign_in.name}}" placeholder="请输入用户名/手机号"></L:input>
+                <L:input bind-input="{{'$Cache.sign_in.password'}}" value="{{$Cache.sign_in.password}}" placeholder="请输入密码" type="password" event-enter="{{'$Event.sign_in.login'}}"></L:input>
+            </div>
+            <div class="upbox">
+                <L:input bind-input="{{'$Cache.sign_up.mobile_phone'}}" value="{{$Cache.sign_up.mobile_phone}}" placeholder="请输入手机号" description="手机号作为以后优惠活动的凭据，请认真填写"></L:input>
+                <L:input type="password" bind-input="{{'$Cache.sign_up.password'}}" value="{{$Cache.sign_up.password}}" placeholder="请输入密码" description="请牢记密码，打死也不能跟别人说"></L:input>
+                <L:input bind-input="{{'$Cache.sign_up.phone_code'}}" value="{{$Cache.sign_up.phone_code}}" placeholder="请输入手机验证码"></L:input>
+                {{#if getcode}}<a class="checkcode focus">{{remaining}}秒后重新获取验证码</a>{{#else}}<a class="checkcode" event-click="{{'$Event.getcheckcode'}}" event-click-getcode="{{'$Event.sign_up.get_register_code'}}" event-enter="{{'$Event.sign_up.register'}}">点击获取手机验证码</a>{{/if}}
+            </div>
+        </div>
+        <div class="readbox">
+            <sbutton shadownum1="0 0 15px 4px" shadownum2="0 5px 18px 1px" class="btn {{#if signPrivate}}{{#else}}focus{{/if}}" text="注册" event-click="{{'$Event.sign_up.register'}}"></sbutton>
+            <sbutton shadownum1="0 0 15px 4px" shadownum2="0 5px 18px 1px" class="btn {{signPrivate}}" text="登陆" event-click="{{'$Event.sign_in.login'}}"></sbutton>
+            <div class="item"><a event-click="{{'$Event.changeTosignup'}}">{{#if signPrivate}}已经有账户了，马上去登陆{{#else}}创建一个新的账户{{/if}}</a>
+            </div>
+            <div class="item"><a href="">查看服务条款</a>
+            </div>
+            <div class="item"><a event-click="{{'$Event.changeLoginType'}}">切换卖家登陆</a>
+            </div>
+        </div>
+    </div>
+
+</div>

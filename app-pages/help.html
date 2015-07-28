@@ -1,0 +1,37 @@
+{{setTitle $Cache.help.title}}
+{{useCss $Cache.help.use_css}}
+<div class="help">
+    <div class="title">什么是"省钱攻略"</div>
+    <p class="test-usecss">“省钱攻略”是多纳微站推出的一个回馈新老客户的活动</p>
+    <p>1. 注册我们的账户并认真填写您个人信息中的手机号；</p>
+    <p>2. 在本站登陆您的账户后，点开商品详情页，通过分享商品链接（链接中带有您的账户认证信息）；</p>
+    <p>3. 当您把链接分享给朋友A时，A通过该链接或二维码在本站下单购买此商品可以获得一定折扣，同时您的账号上也会积累一定的分红。</p>
+</div>
+<div class="help">
+    <div class="title">特别提醒</div>
+    <p>1. 推荐返利的分红或优惠券会在受邀者成功付款并收货后才可以计数；</p>
+    <p>2. 返利过程中若遇到消费者退换货，可能会有所延迟；</p>
+    <p>3. 对于同一店铺的推荐返利活动仅限在此店铺中有效。</p>
+</div>
+<div class="help">
+    <div class="title">本店优惠规则</div>
+    {{#if $Cache.recommend_config.length}}
+    <table>
+        <thead>
+            <td>订单金额</td>
+            <td>返比</td>
+            <td>购买者享受折扣</td>
+        </thead>
+        {{#each $Cache.recommend_config}}
+        <tr>
+            <td>{{max_price}}</td>
+            <td>{{rate}}</td>
+            <td>{{rate}} ({{10-rate*10}}折)</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{#else}}
+    <p><i>本店铺暂未设置任何返利优惠，敬请期待</i>
+    </p>
+    {{/if}}
+</div>

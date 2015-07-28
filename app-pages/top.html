@@ -1,0 +1,185 @@
+<div class="_top">
+    <div class="searchbox {{useSearch&&'focus'}}">
+        <div class="searchinner">
+            <a class="icon-search" event-click-new="{{'$Event.href'}}"></a>
+            <input class="searchtext" type="text" placeholder="请输入文字进行搜索" event-enter="{{'$Event.href'}}" event-blur="{{'$Event.unSearch'}}" bind-input="{{'$Cache.search_text'}}" />
+            <a event-click="{{'$Event.unSearch'}}">X</a>   
+        </div>
+    </div>
+    <div class="_top_left">
+        <!-- <a class="icon-menu" event-click="{{'$Event.show_menu'}}"></a> -->
+        <a class="icon-search" event-click="{{'$Event.useSearch'}}" style="margin-left:.5rem;"></a>
+
+        <!-- <a class="icon-home" href="/main.html"></a> -->
+    </div>
+    <div class="_top_right">
+        {{#if !bus_loginer}}
+        {{#if loginer}}
+        <a class="{{$Cache.is_collect_current_bus&&'icon-star3'||'icon-star'}}" event-click="{{'$Event.user_collect_bus'}}"></a>
+        <a class="icon-cart" href="/cart.html"></a>
+        <a href="http://user.dotnar.com" class="icon-user"></a>
+        <!-- <a event-click="{{'$Event.loginer_show'}}" class="icon-user"></a> -->
+        {{#else}}
+        <a class="icon-cart" href="/cart.html"></a>
+        <a href="/sign_in.html{{$Cache.cb_url}}" class="icon-user2"></a>
+        {{/if}}
+        {{/if}}
+    </div>
+</div>
+<div class="bottom_btn_box">
+    <href to="main.html" class="item {{thisPage||'focus'}}">首页</href>
+    <href to="goods_list.html?id=3" class="item {{thisPage==1&&'focus'}}">商品</href>
+    <href to="tags.html" class="item {{thisPage==2&&'focus'}}">分类</href>
+    <href to="storeinfo.html" class="item {{thisPage==3&&'focus'}}">简介</href>
+    <href to="help.html" class="item {{thisPage==4&&'focus'}}">攻略</href>
+</div>
+
+
+<!-- 背景 -->
+{{#if bus_info.config.is_use_bg_img}} {{#if bus_info.config.is_bg_img_alpha}}
+<div class="themeimgblock" style="position: fixed;width: 100%;height:100%;top:0;left:0;background-color: rgba(255,255,255,0.6);z-index: -1;"></div>
+{{/if}}
+<img style="display:block;position: fixed;width: 100%;height: 100%;z-index: -2;top:0;left: 0;" bind-src="{{bus_info.config.using_bg_img}}{{#if bus_info.config.is_bg_img_blur}}?imageMogr2/blur/10x10{{/if}}">{{/if}}
+
+<script type="text/vm">
+function(vm) {
+    if (Path._current_page !==  "/sign_in") {
+        Path.on("__change__", function(_current_location) {
+            vm.set("$Cache.cb_url", "?cb_url=" + encodeURIComponent(_current_location.href));
+        });
+    } else {
+        vm.set("$Cache._in_sign_in_or_up", true);
+    }
+    //注销功能
+    vm.set("$Event.user_login_out", function() {
+        coAjax.get(appConfig.user.login_out_url, function() {
+            vm.set("loginer", null);
+        });
+    });
+
+
+    function _check_collect_bus(collectBus) {
+        var is_collect = true;
+        if (jSouper.indexOf(collectBus, appConfig.bus_id) === -1) {
+            is_collect = false;
+        }
+        vm.set("$Cache.is_collect_current_bus", is_collect)
+    };
+    eventManager.on("getLoginer", function() {
+        //校验是否已经收藏过此商家
+        var collectBus = vm.get("loginer.collectBus") || [];
+        _check_collect_bus(collectBus);
+    });
+
+    ;
+    (window.coAjaxLoginUser = function(succ_cb) {
+        // alert("获取登陆者信息……"+location.pathname)
+
+        //获取登陆用户的信息
+        /*
+         * 管理员相关的页面无需登录
+         */
+        var no_user_login_pages = {
+            "/admin-beta.html": 1,
+            "/admin-login.html": 1
+        }
+        if (no_user_login_pages[location.pathname]) {
+            return;
+        }
+        // alert("开始获取"+appConfig.user.loginer)
+        console.log("获取登陆者信息……", location.pathname);
+        /*
+         * 获取登录者信息
+         */
+        coAjax.get(appConfig.user.loginer, {
+            _: Math.random()
+        }, function(data) {
+            // alert("success","用户登录成功");
+            console.log("登录者信息：", data.result);
+            userInfo = data.result;
+            vm.set("loginer", userInfo);
+            //触发相关事件
+            eventManager.fire("getLoginer");
+            succ_cb && succ_cb();
+        }, function(errorCode) {
+            // alert("用户未登录");
+            var muse_login_pages = {
+                "#default/sign_in": 1,
+                "#default/cart": 1
+            };
+            //未登录，不可进入个人页，强制跳转到登录页
+            if (muse_login_pages[location.pathname]) {
+                // href.toLogin();
+                Path.jump("sign_in.html");
+            }
+        });
+    })();
+
+
+    vm.set("$Event.user_collect_bus", function() {
+        if (vm.get("$Cache.is_collect_current_bus")) {
+            coAjax["delete"](appConfig.user.collectBus_remove, {
+                bus_id: appConfig.bus_id
+            }, function(result) {
+                alert("已取消店铺收藏");
+                // vm.set('$Cache.is_collect_current_bus',false);
+                _check_collect_bus(result.result);
+            }, function(errorCode, xhr, errorMsg) {
+                // alert("error",errorMsg)
+                _check_collect_bus(vm.get("loginer.collectBus"));
+            });
+        } else {
+            coAjax.post(appConfig.user.collectBus_add, {
+                bus_id: appConfig.bus_id
+            }, function(result) {
+                alert("success", "店铺收藏成功");
+                // vm.set('$Cache.is_collect_current_bus',true);
+                _check_collect_bus(result.result);
+            }, function(errorCode, xhr, errorMsg) {
+                // alert("error",errorMsg)
+                _check_collect_bus(vm.get("loginer.collectBus"));
+            });
+        }
+    });
+
+
+    vm.set('$Event.show_menu', function() {
+        vm.model.toggle('TopPrivate');
+        var i = 1;
+        var t = setInterval(function() {
+            if (vm.get('TopPrivate')) {
+                if (i > 3) {
+                    vm.set('TopPrivate', '');
+                    clearInterval(t);
+                } else {
+                    i += 1;;
+                }
+            } else {
+                clearInterval(t);
+            };
+        }, 1000);
+    });
+
+
+    vm.set('$Event.block_close', function() {
+        clearInterval(t);
+        vm.set('TopPrivate', false);
+    });
+
+    vm.set("$Event.useSearch", function() {
+        vm.set('useSearch', true);
+        $(".searchtext")[0].focus();
+    })
+    vm.set("$Event.unSearch", function() {
+        vm.set('useSearch', false);
+    });
+
+    // // var _scroll_ti;
+    // windowScroll(function(e) {
+    //     // clearTimeout(_scroll_ti);
+    //     // _scroll_ti = setTimeout(function () {
+    //         vm.set("touchNav", e.deltaY > 0);
+    //     // },120)
+    // });
+}
+</script>

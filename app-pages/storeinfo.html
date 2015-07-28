@@ -1,0 +1,46 @@
+{{useCss "css/test2.css"}}
+<div class="_storeinfo">
+    <div class="logobox">
+        <img src="{{#if bus_info.info.logo_url}}{{bus_info.info.logo_url}}?imageView/1/w/150/h/150{{#else}}images/logo.png{{/if}}" />
+    </div>
+
+    <div class="infobox">
+        <div class="item">
+            <div class="ititle test-usecss">店铺介绍：</div>
+            <div class="info">{{bus_info.info.intro}}</div>
+        </div>
+        <div class="item">
+            <div class="ititle">营业时间：</div>
+            <div class="info">
+                {{bus_info.info.open_time.s_hour+":"+bus_info.info.open_time.s_min}} - {{bus_info.info.open_time.e_hour+":"+bus_info.info.open_time.e_min}}
+            </div>
+        </div>
+        <div class="item">
+            <div class="ititle">电话：</div>
+            <div class="info">{{bus_info.info.mobile_phone}}</div>
+        </div>
+        <div class="item">
+            <div class="ititle">邮箱：</div>
+            <div class="info">{{bus_info.info.email}}</div>
+        </div>
+        <div class="item last">
+            <div class="ititle">地址：</div>
+            <div class="info">{{bus_info.info.address}}</div>
+            <div class="map" id="map"></div>
+        </div>
+
+    </div>
+</div>
+
+{{#include '/bottom.html'}}
+<script type="text/vm">
+    function  (vm) {
+        var map=vm.queryElement({
+            className:"map"
+        })[0];
+        require(['jQuery'],function($){
+            var h=$(map).width()*0.8;
+            $(map).css('height',h);
+        })
+    }
+</script>

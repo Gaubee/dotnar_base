@@ -1,0 +1,80 @@
+<xmp type="tag" name="ueditor">
+    <ueditor ${__all_attrs__}>
+        <uecontanier style="width:1000px;height:240px;"></uecontanier>
+    </ueditor>
+</xmp>
+
+<xmp type="tag" name="selectsearch">
+    <!-- event-mouseenter-disable-hidden="{{'$CPrivate.$Event.disable_hidden'}}"
+        event-mouseleave-can-hidden="{{'$CPrivate.$Event.can_hidden'}}" -->
+    <button class="kill-all-style" event-click="{{'$CPrivate.$Event.focus_button'}}" event-blur="{{'$CPrivate.$Event.hidden_button'}}">
+        <selectsearchWrap event-click-show-search="{{'$CPrivate.$Event.show_search'}}" ${__all_attrs__}>
+            <selectResult>
+                {{#if $CPrivate.$Cache.select_result}} {{$CPrivate.$Cache.select_result}} {{#else}}
+                <i>{{$CPrivate.$Cache.placeholder}}</i>
+                {{/if}}
+            </selectResult>
+            <!-- {{#if $CPrivate.$Cache.show_search||$CPrivate.$Cache.focus_input||true}} -->
+            {{#if $CPrivate.$Cache.show_search||$CPrivate.$Cache.focus_input}}
+            <selectPlan>
+                <selectInput>
+                    <input type="text" value="{{$CPrivate.$Cache.search_data}}" bind-input="{{'$CPrivate.$Cache.search_data'}}" placeholder="${search-placeholder}" event-focus="{{'$CPrivate.$Event.focus_input'}}" event-blur="{{'$CPrivate.$Event.hidden_input'}}" event-input="{{'$CPrivate.$Event.search'}}">
+                </selectInput>
+                <optionContainer bind-input="{{'$CPrivate.$Cache.select_result'}}" event-click="{{'$CPrivate.$Event.selected'}}">
+                    ${innerHTML} {{#each $CPrivate.$Cache.datalist_search_result}}
+                    <optionItem value="{{value}}">{{name}}</optionItem>
+                    {{/each}}
+                </optionContainer>
+            </selectPlan>
+            {{/if}}
+        </selectsearchWrap>
+    </button>
+</xmp>
+
+
+<!-- 分页控件 -->
+<xmp type="template" name="pagination">
+    <pagination class="pure-g" page-num="{{$This.total_page}}">
+        <div class="pure-u-1-5">
+            <span>当前位置：第<b>{{$This.page+1}}</b>页</span>
+        </div>
+        <div event-click="{{'$Private.$Event.pre_page'}}" class="pure-button pure-u-1-24 {{$This.page==0&&'hidden'}}"><i class="fa fa-chevron-left"></i></div>
+        {{#each $This._number_list}}
+        <div event-click="{{'$Caller.$Private.$Event.jump_page'}}" class="pure-button pure-u-1-24 {{$Caller.$This.page==$Index&&'pure-button-active'}}">{{$Index+1}}</div>
+        {{/each}}
+        <div event-click="{{'$Private.$Event.next_page'}}" class="pure-button pure-u-1-24 {{$This.page+1>=$This.total_page&&'hidden'}}"><i class="fa fa-chevron-right"></i></div>
+    </pagination>
+</xmp>
+
+<!-- 图片上传控件 -->
+<xmp type="tag" name="img-uploader">
+    <imgUploaderWrap ${__all_attrs__}>
+    {{#if $CPrivate.$Cache.img_url}}
+        <div style="width:100%;height:100%;"
+            event-mouseenter="{{'$CPrivate.$Event.show_mark'}}"
+            event-click="{{'$CPrivate.$Event.toggle_mark'}}"
+            event-mouseleave="{{'$CPrivate.$Event.hide_mark'}}">
+            <img class="upload-img-preview" bind-src="{{$CPrivate.$Cache.img_url}}?imageView/1/w/{{$CPrivate.$Cache.img_width||1}}/h/{{$CPrivate.$Cache.img_height||1}}"/>
+            <imgMark>
+                <div class="button-item" event-click="{{'$CPrivate.$Event.remove'}}" event-click-onremove="${onremove}">移除</div>
+            </imgMark>
+        </div>
+    {{#else}}
+        {{#if $CPrivate.$Cache.uploading}}
+        <div class="upload-loding">上传中</div>
+        {{#else}}
+        <div class="click-to-add">
+            <input name="up" type="file" accept="image/*" />
+            <i class="icon fa fa-plus"></i>
+            <p class="value">{{$CPrivate.$Cache.text}}</p>
+        </div>
+        {{/if}}
+    {{/if}}
+    </imgUploaderWrap>
+</xmp>
+<xmp type="tag" name="share-weibo" >
+    <div event-click-share-weibo="{{'$CPrivate.$Event.shareToWeibo'}}"  ${__all_attrs__}></div>
+</xmp>
+<xmp type="tag" name="href">
+    <href ${__all_attrs__} event-click-noreload-jump="{{'$CPrivate.$Event.noreload_jump'}}">${innerHTML}</href>
+</xmp>

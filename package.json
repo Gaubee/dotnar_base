@@ -1,0 +1,11 @@
+{
+  "name": "dotnar_base",
+  "version": "1.0.0",
+  "description": "新版Dotnar的前端框架",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gaubee",
+  "license": "MIT"
+}

@@ -1,0 +1,43 @@
+<div class="goods_list">
+    <div class="chooselist {{touchNav&&'focus'}}">
+        <a href="goods_list.html?id=3">
+            <div class="{{cPrivate1}}">最新上架</div>
+        </a>
+        <a href="goods_list.html?id=2">
+            <div class="{{cPrivate2}}">销量最高</div>
+        </a>
+    </div>
+
+    {{#each goods}}
+    <div class="listitem">
+        <div class="goodsimg">
+            <a href="goods_details.html?id={{_id}}">
+                <img src="{{preview_img_url}}?imageView/1/w/100/h/100" />
+            </a>
+        </div>
+        <div class="goodsinfo">
+            <a href="goods_details.html?id={{_id}}">
+                <div class="name">{{goods_name+" "}}
+                    <span class="detail">{{intro}}</span>
+                </div>
+            </a>
+            <div class="sale">
+                <div class="sitem">
+                    <span class="price">￥{{price}}</span>
+                </div>
+                <div class="sitem">库存：{{num}}</div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+
+    <div class="getmore">
+        {{#if loadingoods}}
+        <p>正在加载</p>
+        {{#else}} {{#if isresult}}
+        <sbutton shadownum1="0 0 10px 1px" shadownum2="0 0 6px 0" class="btn" event-click="{{'$Event.getMoreGoods'}}" text="查看更多商品"></sbutton>
+        {{#else}}
+        <p>没有更多东西了</p>
+        {{/if}} {{/if}}
+    </div>
+</div>

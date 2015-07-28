@@ -1,0 +1,192 @@
+.kill-all-style {
+	background: none;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	color: initial;
+	box-shadow: none
+}
+
+.kill-all-style:hover {
+	background: none
+}
+
+ueditor{
+	display: block;
+	width: 100%;
+}
+ueditor .edui-btn-toolbar{
+	/* 控件自动换行 */
+	line-height: 0;
+	white-space: normal;
+}
+
+selectsearchWrap {
+	display: inline-block;
+	border: 1px solid #CCC;
+	box-shadow: inset 0 1px 3px #DDD;
+	border-radius: 4px;
+	vertical-align: middle;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background-color: #fff;
+	display: inline-block;
+	vertical-align: top;
+	position: relative;  
+	z-index: 100000;
+}
+
+selectsearchWrap * {
+	box-sizing: border-box
+}
+
+selectsearchWrap selectResult {
+	display: block;
+	height: 32px;
+	min-width: 120px;
+	line-height: 32px;
+	font-size: 14px
+}
+
+selectsearchWrap selectResult i {
+	color: #999
+}
+
+selectsearchWrap selectPlan {
+	display: block;
+	background-color: #fff;
+}
+
+selectsearchWrap selectPlan selectInput,selectsearchWrap selectPlan optionContainer {
+	display: block;
+	min-width: 120px
+}
+
+selectsearchWrap selectPlan selectInput input {
+	display: inline-block;
+	outline: none;
+	width: 0;
+	min-width: 94%;
+	font-size: 12px;
+	margin: 0;
+	padding: 8px 8px 6px 8px;
+	position: relative;
+	outline: none;
+	border: none;
+	background: bottom left linear-gradient(#d4d5d8, #d4d5d8) no-repeat,bottom center linear-gradient(#d4d5d8, #d4d5d8) repeat-x,bottom right linear-gradient(#d4d5d8, #d4d5d8) no-repeat;
+	background-size: 1px 6px, 1px 1px, 1px 6px
+}
+
+selectsearchWrap selectPlan selectInput input:hover,selectsearchWrap selectPlan selectInput input:focus {
+	background: bottom left linear-gradient(#aaabb1, #aaabb1) no-repeat,bottom center linear-gradient(#aaabb1, #aaabb1) repeat-x,bottom right linear-gradient(#aaabb1, #aaabb1) no-repeat;
+	background-size: 1px 6px, 1px 1px, 1px 6px
+}
+
+selectsearchWrap selectPlan optionContainer {
+	max-height: 300px;
+	overflow-y: auto
+}
+
+selectsearchWrap selectPlan optionContainer>* {
+	display: none
+}
+
+selectsearchWrap selectPlan optionContainer>optionItem {
+	display: block;
+	width: 100%;
+	min-height: 28px;
+	line-height: 28px;
+	border-bottom: 1px solid #aaa
+}
+
+selectsearchWrap selectPlan optionContainer>optionItem:hover {
+	background-color: #d4d5d8
+}
+
+/* img uploader */
+
+imguploaderwrap {
+	width: 120px;
+	height: 120px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+imguploaderwrap .upload-img-preview {
+	width: 100%;
+	height: 100%;
+	border-radius: 2%
+}
+
+imguploaderwrap imgmark {
+	display: block;
+	height: 2em;
+	background: rgba(170,171,177,0.5) !important;
+	background-color: #aaabb1;
+	position: relative;
+	filter: alpha(opacity=50);
+	position: relative;
+	z-index: 1
+}
+
+imguploaderwrap imgmark .button-item {
+	height: 2em;
+	text-align: center;
+	font-size: 1.1em;
+	cursor: pointer;
+	color: #fff
+}
+
+imguploaderwrap imgmark.show {
+	margin-top: -2em
+}
+
+imguploaderwrap .upload-loding {
+	width: 90%;
+	height: 0;
+	border: 3px dotted #d4d5d8;
+	border-radius: 20%;
+	text-align: center;
+	padding-top: 45%;
+	padding-bottom: 45%;
+	font-size: 18px;
+	line-height: 0px
+}
+
+imguploaderwrap .click-to-add {
+	width: 90%;
+	height: 90%;
+	border: 3px dotted #555558;
+	border-radius: 20%
+}
+
+imguploaderwrap .click-to-add input {
+	height: 100%;
+	width: 100%;
+	display: block;
+	position: relative;
+	z-index: 2;
+	margin-bottom: -75%;
+	-webkit-opacity: 0;
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+	filter: alpha(opacity=0);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	*filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0)
+}
+
+imguploaderwrap .click-to-add .icon {
+	width: 100%;
+	font-size: 2em;
+	font-weight: bold;
+	text-align: center;
+	vertical-align: middle;
+	display: block
+}
+
+imguploaderwrap .click-to-add .value {
+	text-align: center;
+	display: block
+}

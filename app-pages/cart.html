@@ -1,0 +1,50 @@
+<div class="menubox {{touchNav&&'focus'}}">
+    <div class="mleft">
+        我的购物车
+    </div>
+    <div class="mright">
+        <button class="btn" event-click="{{'$Event.changToEdit'}}">{{#if cartPrivate}}完成{{#else}}编辑{{/if}}</button>
+    </div>
+</div>
+<div class="_cart">
+    <div class="cartbox">
+        {{#if user.cart_detail.length}} {{#each user.cart_detail}} {{#each goods_info}}
+        <div class="_cart_item">
+            <div class="ileft">
+                <a href="#default/goods_details?id={{goods_id}}">
+                    <img bind-src="{{goods.preview_img_url}}?imageView/1/h/120" />
+                </a>
+            </div>
+            <div class="imedium">
+                <a href="/goods-details.html?id={{goods_id}}">
+                    <div class="name">{{goods.goods_name+' '+goods.intro}}
+                    </div>
+                </a>
+                <div class="info">
+                    数量：{{num}}
+                </div>
+            </div>
+            <div class="iright">
+                <div class="_price {{$Top.cartPrivate}}">
+                    <div>单价</div>
+                    <div class="price">￥{{#Fixed goods.price}}</div>
+                </div>
+                <div class="_num">
+                    <button class="btn" event-click="{{'$Top.$Event.cart.remove_goods'}}">移除</button>
+                    <input event-change="{{'$Top.$Event.cart.update_cart_num'}}" class="num" type="number" min=1 max="100" value="{{num}}" bind-input="{{'num'}}" />
+                </div>
+            </div>
+        </div>
+        {{/each}} {{/each}} {{#else}}
+        <p>购物车中暂无商品</p>
+        {{/if}}
+    </div>
+
+    <div class="blockbottom"></div>
+    <div class="floatcount">
+        合计：
+        <span style="color:red">￥{{#Fixed $Cache.cart.total_price}}</span>
+        <div class="dem"></div>
+        <sbutton event-click="{{'$Event.cart.cart_to_ach'}}" shadownum1="0 0 15px 3px" shadownum2="0 0 4px 0" class='btn' text="结算"></sbutton>
+    </div>
+</div>

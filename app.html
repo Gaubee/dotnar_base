@@ -1,0 +1,63 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title><$ busInfo.info.title $></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+        <!-- <link rel="stylesheet" href="__dotnar_lib_base_url__/css/normalize.css">
+        <link rel="stylesheet" href="__dotnar_lib_base_url__/css/font-awesome.min.css"> -->
+        <!-- <link rel="stylesheet" href="__dotnar_lib_base_url__/css/fontello.css"> -->
+        <link rel="stylesheet" href="css/app.css">
+        <script> appConfig = <$ appConfig|tojson $>; </script>
+        <script> busInfo = <$ busInfo|tojson $>; </script>
+        <script type="text/javascript" src="__dotnar_lib_base_url__/js/lib/require.min.js"></script>
+        <script type="text/javascript" src="__dotnar_lib_base_url__/js/require.config.v3.js"></script>
+        <script type="text/javascript" src="__dotnar_lib_base_url__/js/require.config.v3.bus.js"></script>
+        <script>
+        require.config({
+            paths: {
+                "app": "./js/app"
+            },
+            shim: {
+                "app": {
+                    deps: ["jQuery.notify", "SockJS", "moment-locale-zh-cn", "jSouper", "UI.Model"]
+                }
+            }
+        });
+        require(["r_css!css/mobile.main.css"]);
+        console.log(require.load);
+        require(["app"], function(argument) {
+            closePageLoading();
+        });
+        </script>
+    </head>
+    <body>
+        <div id="jSouperApp" class="hidden">
+            {{#include "app-pages/top.html"}}
+            <div class="body _topblock">
+                {{#teleporter "main"}}
+            </div>
+        </div>
+<div id="pageLoader" class='overlay'>
+    <div class='spinner center'>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <div class='spinner-blade'></div>
+        <center class="spinner-title">点纳科技</center>
+    </div>
+</div>
+    </body>
+</html>

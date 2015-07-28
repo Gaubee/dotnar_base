@@ -40,7 +40,7 @@ server_url = "http://localhost:6520/";
 			var queryHash = this.queryHash || (this.queryHash = {});
 			queryHash[key] = value;
 		},
-		toSting: function(origin) {
+		toString: function(origin) {
 			origin || (origin = location.origin);
 			var queryHash = this.queryHash || {};
 			var queryStr = "";

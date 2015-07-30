@@ -1,0 +1,32 @@
+<div class="bottom_btn_box">
+    <href to="/main.html" class="item">
+        <div class="icon-home"></div>
+        首页
+    </href>
+    <href to="/goods_list.html?id=3" class="item">
+        <div class="icon-th-large"></div>
+        商品
+    </href>
+    <href to="/storeinfo.html" class="item">
+        <div class="icon-circle-empty"></div>
+        简介
+    </href>
+    <href to="/cart.html" class="item">
+        <div class="icon-basket"></div>
+        购物车
+    </href>
+    <href to="/mobile.personal.html">
+        <div class="icon-user"></div>
+        {{loginer?'我的':'登录'}}
+    </href>
+</div>
+
+{{useCss "/app-pages/css/default.css", "*"}}
+
+<!-- 背景 -->
+{{#if bus_info.config.is_use_bg_img}} 
+    {{#if bus_info.config.is_bg_img_alpha}}
+    <div class="themeimgblock" style="position: fixed;width: 100%;height:100%;top:0;left:0;background-color: rgba(255,255,255,0.6);z-index: -1;"></div>
+    {{/if}}
+    <img style="display:block;position: fixed;width: 100%;height: 100%;z-index: -2;top:0;left: 0;" bind-src="{{bus_info.config.using_bg_img}}{{#if bus_info.config.is_bg_img_blur}}?imageMogr2/blur/10x10{{/if}}">
+{{/if}}

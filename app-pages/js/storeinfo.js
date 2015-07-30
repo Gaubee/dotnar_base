@@ -1,6 +1,5 @@
 (function() {
-	Path.on("/__basename__", function() {
-		App.set("thisPage", 3);
+	Path.on("/__basename__.html", function() {
 	});
 
 
@@ -47,15 +46,6 @@
 				local.search(address);
 				clearInterval(_search_ti);
 			}
-			// setTimeout(function() {
-			// 	map.setZoom(15);
-			// 	local.searchNearby("公交", address);
-			// 	var x = map.getCenter().lng;
-			// 	var y = map.getCenter().lat;
-			// 	var pStart = new BMap.Point(x, y);
-			// 	var pEnd = new BMap.Point(x * 1.01, y * 1.01);
-			// 	// alert("当前地图中心点：" + map.getCenter().lng + "," + map.getCenter().lat);
-			// }, 1000); //1秒后放到14级
 		});
 	};
 

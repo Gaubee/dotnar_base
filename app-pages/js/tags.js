@@ -1,6 +1,6 @@
 ( function() {
 	//放置监听HASH变动
-	Path.on("/__basename__", function(_current_location) {
+	Path.on("/__basename__.html", function(_current_location) {
 		var queryString = _current_location.query;
 		var tag_id = queryString.get("tag_id");
 		App.set("thisPage", 2);

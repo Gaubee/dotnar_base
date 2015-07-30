@@ -1,0 +1,110 @@
+{{useCss "app-pages/css/storeinfo.css"}}
+
+<div class="_storeinfo">
+    <div class="logobox">
+        <img src="{{#if bus_info.info.logo_url}}{{bus_info.info.logo_url}}?imageView/1/w/150/h/150{{#else}}images/logo.png{{/if}}" />
+    </div>
+
+    <div class="infobox">
+        <div class="item">
+            <div class="icons">
+                <i class="icon-qrcode" event-click="{{'$Event.show_qrcode'}}"></i>
+                <i class="{{$Cache.is_collect_current_bus&&'icon-star3'||'icon-star'}}" event-click="{{'$Event.user_collect_bus'}}"></i>
+            </div>
+            <div class="qrcodebox {{$Cache.show_qrcode&&'focus'}}">
+                <img class="qrcode" src="{{$Cache.bus.qrcode_data}}" />
+            </div>
+            <jqrcode
+                text="{{bus_info.info.domain_url}}#default/main?rcid={{loginer._id}}"
+                ec-level="H"
+                size="300"
+                radius="20"
+                m-image="{{bus_info.info.logo_url}}?imageView/2/h/150/w/150"
+                m-size="30"
+                bind-input="{{'$Cache.bus.qrcode_data'}}"
+                style="display:none"
+            ></jqrcode>
+        </div>
+        <div class="item">
+            <div class="ititle">
+                <div class="mark"></div>
+                {{bus_info.info.title}}
+            </div>
+            {{#each bus_info.info.store_imgs}}
+            <img class="infoimg" bind-src="{{href}}?imageView/2/w/500" />
+            {{/each}}
+            <div class="info p">{{bus_info.info.intro}}</div>
+        </div>
+        <div class="item">
+            <div class="ititle">
+                <div class="mark"></div>
+                营业时间：
+            </div>
+            <div class="info">
+                {{bus_info.info.open_time.s_hour+":"+bus_info.info.open_time.s_min}} - {{bus_info.info.open_time.e_hour+":"+bus_info.info.open_time.e_min}}
+            </div>
+        </div>
+        <div class="item">
+            <div class="ititle">
+                <div class="mark"></div>
+                联系方式
+            </div>
+            <div class="info">电话：{{bus_info.info.mobile_phone}}</div>
+            <div class="info">邮箱：{{bus_info.info.email}}</div>
+            <div class="info">地址：{{bus_info.info.address}}</div>
+            <div class="map" id="map"></div>
+        </div>
+        <div class="item">
+            <img class="infoimg" src="/images/share_intro.jpg" />                
+        </div>
+    </div>
+</div>
+
+<div class="help">
+    <div class="title">"推荐返利"</div>
+    <p>“推荐返利”是多纳微站推出的一个回馈新老客户的活动</p>
+    <p>1. 注册我们的账户并认真填写您个人信息中的手机号；</p>
+    <p>2. 在本站登陆您的账户后，点开商品详情页，通过分享商品链接（链接中带有您的账户认证信息）；</p>
+    <p>3. 当您把链接分享给朋友A时，A通过该链接或二维码在本站下单购买此商品可以获得一定折扣，同时您的账号上也会积累一定的分红。</p>
+</div>
+<div class="help">
+    <div class="title">特别提醒</div>
+    <p>1. 推荐返利的分红或优惠券会在受邀者成功付款并收货后才可以计数；</p>
+    <p>2. 返利过程中若遇到消费者退换货，可能会有所延迟；</p>
+    <p>3. 对于同一店铺的推荐返利活动仅限在此店铺中有效。</p>
+</div>
+<div class="help">
+    <div class="title">本店优惠规则</div>
+    {{#if $Cache.recommend_config.length}}
+    <table>
+        <thead>
+            <td>订单金额</td>
+            <td>返比</td>
+            <td>购买者享受折扣</td>
+        </thead>
+        {{#each $Cache.recommend_config}}
+        <tr>
+            <td>{{max_price}}</td>
+            <td>{{rate}}</td>
+            <td>{{rate}} ({{10-rate*10}}折)</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{#else}}
+    <p><i>本店铺暂未设置任何返利优惠，敬请期待</i>
+    </p>
+    {{/if}}
+</div>
+
+
+<script type="text/vm">
+    function  (vm) {
+        var map=vm.queryElement({
+            className:"map"
+        })[0];
+        require(['jQuery'],function($){
+            var h = $(map).width()*0.8;
+            $(map).css('height',h);
+        })
+    }
+</script>

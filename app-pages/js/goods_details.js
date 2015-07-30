@@ -2,18 +2,24 @@
 
 	var goods_id;
 
+	//记录访问量
+	coAjax.post(appConfig.hot_add + goods_id, function(result) {
+		App.set("$Cache.goods_details.hot_num", result.result);
+	});
+
 	function _is_collect_goods(collect) {
 		var result = false;
 		if (jSouper.indexOf(collect, goods_id) !== -1) {
 			result = true;
 		}
-		App.set("$Cache.goods_detail.is_collect", result);
+		App.set("$Cache.goods_details.is_collect", result);
 	};
-	App.set("$Event.checkAdd", function() {
+
+	App.set("$Event.goods_details.checkAdd", function() {
 		App.model.toggle('checkAdd');
 	});
 
-	App.set("$Event.goods.add_to_cart", function(e) {
+	App.set("$Event.goods_details.goods.add_to_cart", function(e) {
 		var cart_item = {
 			goods_id: goods_id,
 			num: App.get("$Cache.goods_details.buy_number")
@@ -37,7 +43,7 @@
 			cache_cart.push(cart_item)
 		}
 	});
-	App.set("$Event.goods.selectRecUrl", function(e) {
+	App.set("$Event.goods_details.goods.selectRecUrl", function(e) {
 		//全选
 		this.select && this.select();
 	});
@@ -46,7 +52,14 @@
 		_is_collect_goods(collect);
 	});
 
-	App.set("$Event.goods.collect_toggle", function() {
+	App.set("$Event.goods_details.goods.collect_toggle", function() {
+		if (!App.get("loginer")) {
+			alert("error", "收藏前请先登录！！！");
+			myConfirm("是否前去登陆？", function() {
+				Path.jump("sign_in.html");
+			});
+			return;
+		};
 		if (App.get("$Cache.goods_detail.is_collect")) {
 			coAjax["delete"](appConfig.user.collect_remove, {
 				goods_id: goods_id
@@ -67,33 +80,9 @@
 			});
 		}
 	});
-	// 分享
-	// 微博
-	App.set('$Event.shareToWeibo', function() {
-		var title = "我觉得#" + App.get("goods_detail.goods_name") + "#不错，跟大家分享一下";
-		console.log(title);
-		var pic = App.get("goods_detail.preview_img_url") + "?imageView/1/w/100/h/100";
-		var rLink = location.host.toString() + "/mobile.main.html#default/goods_details?id=" + App.get('goods_detail._id') + "&rcid=" + App.get("loginer._id");
-		var site = location.host;
-		var summary = App.get('goods_detail.intro');
-		window.open("http://service.weibo.com/share/share.php?url=" + encodeURIComponent(rLink) + "&title=" + encodeURIComponent(title.replace(/&nbsp;/g, " ").replace(/<br \/>/g, " ")) + "&pic=" + encodeURIComponent(pic),
-			"分享至新浪微博",
-			"toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no");
-	});
-	// QQ空间
-	App.set('$Event.shareQzone', function() {
-		var title = "我觉得#" + App.get("goods_detail.goods_name") + "#不错，跟大家分享一下";
-		console.log(title);
-		var pic = App.get("goods_detail.preview_img_url") + "?imageView/1/w/100/h/100";
-		var rLink = location.host.toString() + "/mobile.main.html#default/goods_details?id=" + App.get('goods_detail._id') + "&rcid=" + App.get("loginer._id");
-		var site = location.host;
-		var summary = App.get('goods_detail.intro');
-		window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?title=' +
-			encodeURIComponent(title) + '&url=' + encodeURIComponent(rLink) + '&summary=' +
-			encodeURIComponent(summary) + '&site=' + encodeURIComponent(site), '_blank', 'scrollbars=no,status=no,resizable=yes');
-	});
-	Path.on("/__basename__", function(_current_location) {
 
+	Path.on("/__basename__.html", function(_current_location) {
+		App.set("checkAdd", false);
 		var queryString = _current_location.query;
 		console.log(queryString);
 		var recommender_id = queryString.get("rcid");
@@ -128,7 +117,45 @@
 
 		//根据HASH指令自动添加到购物车
 		if (_current_location.hash.indexOf("ADD_TO_CART") !== -1) {
-			App.get("$Event.goods.add_to_cart")();
+			App.get("$Event.goods_details.goods.add_to_cart")();
 		}
+
+		// 分享
+		// 微博
+		App.set('$Event.goods_details.shareToWeibo', function() {
+			var title = "我觉得#" + App.get("goods_detail.goods_name") + "#不错，跟大家分享一下";
+			console.log(title);
+			var pic = App.get("goods_detail.preview_img_url") + "?imageView/1/w/100/h/100";
+			var rLink = location.host.toString() + "/mobile.main.html#default/goods_details?id=" + App.get('goods_detail._id') + "&rcid=" + App.get("loginer._id");
+			var site = location.host;
+			var summary = App.get('goods_detail.intro');
+			window.open("http://service.weibo.com/share/share.php?url=" + encodeURIComponent(rLink) + "&title=" + encodeURIComponent(title.replace(/&nbsp;/g, " ").replace(/<br \/>/g, " ")) + "&pic=" + encodeURIComponent(pic),
+				"分享至新浪微博",
+				"toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no");
+		});
+		// QQ空间
+		App.set('$Event.goods_details.shareQzone', function() {
+			var title = "我觉得#" + App.get("goods_detail.goods_name") + "#不错，跟大家分享一下";
+			console.log(title);
+			var pic = App.get("goods_detail.preview_img_url") + "?imageView/1/w/100/h/100";
+			var rLink = location.host.toString() + "/mobile.main.html#default/goods_details?id=" + App.get('goods_detail._id') + "&rcid=" + App.get("loginer._id");
+			var site = location.host;
+			var summary = App.get('goods_detail.intro');
+			window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?title=' +
+				encodeURIComponent(title) + '&url=' + encodeURIComponent(rLink) + '&summary=' +
+				encodeURIComponent(summary) + '&site=' + encodeURIComponent(site), '_blank', 'scrollbars=no,status=no,resizable=yes');
+		});
+	});
+
+	// 返回
+	App.set("$Event.goods_details.detailGoBack", function() {
+		if (App.get("$Cache.page_index") > 0) {
+			window.history.back();
+		} else {
+			Path.jump("main.html");
+		}
+	});
+	App.set("$Event.goods_details.show_share_link", function() {
+		App.model.toggle("$Cache.show_share_link");
 	});
 }());

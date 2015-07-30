@@ -1,4 +1,4 @@
-Path.on("/__basename__", function() {
+Path.on("/__basename__.html", function() {
 	App.set("thisPage", 4);
 	coAjax.get(appConfig.open.get_bus_recommend_config + busInfo._id, function(result) {
 		App.set("$Cache.recommend_config", result.result);

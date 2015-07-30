@@ -6,7 +6,7 @@ require(["Cookies"], function(Cookies) {
 		Path.jump("http://my.dotnar.com");
 	};
 	var queryString;
-	Path.on('/__basename__', function(_current_location) {
+	Path.on('/__basename__.html', function(_current_location) {
 		queryString = _current_location.query;
 	});
 	var countsign = 0;

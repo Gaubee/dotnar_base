@@ -1,26 +1,27 @@
+{{useCss "app-pages/css/goods_list.css"}}
 <div class="goods_list">
     <div class="chooselist {{touchNav&&'focus'}}">
-        <a href="goods_list.html?id=3">
+        <href to="goods_list.html?id=3">
             <div class="{{cPrivate1}}">最新上架</div>
-        </a>
-        <a href="goods_list.html?id=2">
+        </href>
+        <href to="goods_list.html?id=2">
             <div class="{{cPrivate2}}">销量最高</div>
-        </a>
+        </href>
     </div>
 
     {{#each goods}}
     <div class="listitem">
         <div class="goodsimg">
-            <a href="goods_details.html?id={{_id}}">
+            <href to="goods_details.html?id={{_id}}">
                 <img src="{{preview_img_url}}?imageView/1/w/100/h/100" />
-            </a>
+            </href>
         </div>
         <div class="goodsinfo">
-            <a href="goods_details.html?id={{_id}}">
+            <href to="goods_details.html?id={{_id}}">
                 <div class="name">{{goods_name+" "}}
                     <span class="detail">{{intro}}</span>
                 </div>
-            </a>
+            </href>
             <div class="sale">
                 <div class="sitem">
                     <span class="price">￥{{price}}</span>

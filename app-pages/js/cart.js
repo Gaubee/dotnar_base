@@ -9,7 +9,7 @@
 			vm.set('cartPrivate', 'focus');
 		}
 	});
-	Path.on("/__basename__", function(_current_location) {
+	Path.on("/__basename__.html", function(_current_location) {
 		/*
 		 * 请求购物车数据
 		 */

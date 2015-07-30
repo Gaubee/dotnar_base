@@ -21,7 +21,7 @@
 		}
 	};
 
-	Path.on("/__basename__", function() {
+	Path.on(["/__basename__.html", "/"], function() {
 		App.set("thisPage", false);
 		//获取指定页的商品
 		coAjax.get(appConfig.goods.list, {
@@ -62,21 +62,3 @@
 
 /*交互*/
 ;
-(function() {
-	/*
-	 * 轮播器
-	 */
-	Path.once("/__basename__", function() {
-		var $picwall = $(".picwall");
-		console.log(".picwall:", $picwall);
-		$picwall.height($picwall.width() * 0.2841);
-		var i = 1;
-		var timer = setInterval(function() {
-			var pics = $(".pic");
-			var len = $(pics).length;
-			$(pics[i % len]).fadeIn(800);
-			$(pics[(i - 1) % len]).fadeOut(800);
-			i += 1;
-		}, 5000);
-	});
-}());

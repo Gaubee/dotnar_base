@@ -1,5 +1,5 @@
 (function() {
-	Path.on("/__basename__", function(_current_location) {
+	Path.on("/__basename__.html", function(_current_location) {
 		var queryString = _current_location.query;
 		get_goods_type = queryString.get("id");
 		App.set("$Cahce.goods_list_type", get_goods_type);

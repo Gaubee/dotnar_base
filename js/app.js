@@ -400,7 +400,7 @@ server_url = "http://localhost:6520/";
 (function() {
 	var _confirm = window.confirm;
 	window.native_confirm = _confirm;
-	window.confirm = window.my_confirm = function(str, true_cb, false_cb) {
+	window.confirm = window.myConfirm = function(str, true_cb, false_cb) {
 		var res = _confirm(str);
 		if (res) {
 			true_cb && true_cb();
@@ -482,7 +482,7 @@ server_url = "http://localhost:6520/";
 		info: "#1ba1e2",
 		lightWhite: "#f6f5ec"
 	};
-	window.alert = window.my_alert = function(type, alert_str) {
+	window.alert = window.myAlert = function(type, alert_str) {
 		var args = arguments;
 		var result;
 		if (args.length === 1) {
@@ -577,17 +577,15 @@ server_url = "http://localhost:6520/";
 	var require_cache = {
 		"": "" //包括了空link的情况，使用缓存机制替代了
 	};
-	var styleNode = "use_css_style_node";
 
-	function req_css(link, cb) {
-		debugger
+	function req_css(link, cb, style_id) {
 		if (require_cache.hasOwnProperty(link)) {
 			var css_text = require_cache[link];
 			//如果是从缓存里面直接加载过来的，加载插件是不会再次执行addSheet，所以需要手动执行
-			addSheet(css_text, styleNode);
+			addSheet(css_text, style_id);
 			cb(css_text);
 		} else {
-			require(["r_css!" + link + ">STYLE_ID:" + styleNode], function(css_text) {
+			require(["r_css!" + link + ">STYLE_ID:" + style_id], function(css_text) {
 				require_cache[link] = css_text;
 				cb(css_text);
 			}, function() {
@@ -597,12 +595,12 @@ server_url = "http://localhost:6520/";
 	};
 
 	function _load_css_link(use_css_config) {
-		if (use_css_config.pagename === Path._current_page) { //匹配成功
+		if (use_css_config.pagename.exec(Path._current_page)) { //匹配成功
 			if (!use_css_config.load) { //未下载，直接下载使用并缓存
+				use_css_config.id = this._id;
 				use_css_config.load = true; //锁定
 				use_css_config.using = true; //锁定
 				use_css_config.loading = true;
-				// debugger
 				openPageLoading();
 
 				(function start_load_css() {
@@ -611,37 +609,36 @@ server_url = "http://localhost:6520/";
 						//css_link发生改变了，重新发起请求，并删除已经加进来的css_text
 						if (use_css_config.abort && current_css_link !== use_css_config.css_link) {
 							use_css_config.abort = false;
-							removeSheet(css_text, styleNode);
+							removeSheet(css_text, use_css_config.style_id);
 							start_load_css();
 							return;
 						}
 						closePageLoading();
 						use_css_config.css_text = css_text;
 						use_css_config.loading = false;
-					});
+					}, use_css_config.style_id);
 				}());
 			} else if (!use_css_config.using) { //已经下载，直接使用
-				// debugger
-				addSheet(use_css_config.css_text, styleNode)
+				addSheet(use_css_config.css_text, use_css_config.style_id)
 				use_css_config.using = true;
 			}
 		} else { //不匹配
 			if (use_css_config.using) { //如果使用中，进行删除
-				// debugger
-				removeSheet(use_css_config.css_text, styleNode);
+				removeSheet(use_css_config.css_text, use_css_config.style_id);
 				use_css_config.using = false;
 			}
 		}
 	}
-	jSouper.registerHandle("useCss", function(css_link) {
+	jSouper.registerHandle("useCss", function(css_link, match_pagename) {
 		var id = this._id;
 		var use_css_config;
 		css_link = css_link ? Path.getPathname(css_link) : "";
 		//初始化
 		if (!(use_css_config = USE_CSS_MAP[id]) && !USE_CSS_MAP.hasOwnProperty(id)) {
 			use_css_config = (USE_CSS_MAP[id] = {
-				pagename: Path._current_page,
-				css_link: css_link
+				pagename: Path.pathToRegexp(match_pagename || Path._current_page),
+				css_link: css_link,
+				style_id: this.vmName
 			});
 			Path.on("*", function() {
 				_load_css_link(use_css_config);
@@ -655,7 +652,7 @@ server_url = "http://localhost:6520/";
 				} else if (use_css_config.using) { //如果使用中，直接替换CSS文件
 
 					//删除CSS文件
-					removeSheet(use_css_config.css_text, styleNode);
+					removeSheet(use_css_config.css_text, use_css_config.style_id);
 					use_css_config.using = false;
 
 					//没有缓存的话，重新请求
@@ -745,11 +742,12 @@ _can_history_pushState = !!history.pushState;
 
 		event_register.fns.push(cb);
 
-		if (_canRunEventAble(event_register, Path._current_page)) {
+		if (_canRunEventAble(event_register, Path._current_location.pathname)) {
 			cb.call({
 				path: event_register.path,
 				keys: event_register.keys.slice(),
-				regex: event_register.regex
+				regex: event_register.regex,
+				params: event_register.params
 			}, Path._current_location)
 		}
 
@@ -771,7 +769,8 @@ _can_history_pushState = !!history.pushState;
 				var context = {
 					path: event_register.path,
 					keys: event_register.keys.slice(),
-					regex: event_register.regex
+					regex: event_register.regex,
+					params: event_register.params
 				};
 				jSouper.forEach(event_register.fns, function(cb) {
 
@@ -785,6 +784,9 @@ _can_history_pushState = !!history.pushState;
 		Path.jump = function(href) {
 			_aNode.href = href;
 			if (_aNode.origin === location.origin) {
+				if (_aNode.href === location.href) {
+					return;
+				}
 				history.pushState(null, "跳转中……", _aNode.href.replace(_aNode.origin, ""));
 				Path.emitDefaultOnload();
 			} else {
@@ -837,10 +839,17 @@ _can_history_pushState = !!history.pushState;
 	};
 	//通用路由模块，与jSouper进行耦合
 	Path.jSouper_VMS = {};
+
 	Path.jSouperRoute = function(options) {
+		if (Path._current_location) {
+			if (Path._current_location.href === options.href && options.emit_lock) {
+				return;
+			}
+		}
+
 		var _viewModules = Path.jSouper_VMS; //VM缓存区
-		var base_HTML_url = options.html = options.html || "/app-pages/"; //请求HTML的路径
-		var base_js_url = options.js = options.js || "/js/app-pages/"; //请求js文件的路径
+		var base_HTML_url = options.html = options.html || "/app-pages/pages/"; //请求HTML的路径
+		var base_js_url = options.js = options.js || "/app-pages/js"; //请求js文件的路径
 		var base_prefix_url = options.prefix = options.prefix || ""; //URL HASH的前缀
 		var tele_name = options.tel = options.tel || "main"; //VM置放的锚点
 		var href = options.href = options.href;
@@ -891,13 +900,13 @@ _can_history_pushState = !!history.pushState;
 		var rightVM = _viewModules[xmp_url];
 		if (!rightVM) {
 			require(["r_text!" + xmp_url], function(html) {
-				_viewModules[xmp_url] = rightVM = jSouper.parse(html, xmp_url)(current_vm.getModel());
+				_viewModules[xmp_url] = rightVM = jSouper.parse(html, xmp_url)(current_vm.getModel(), xmp_url);
 				_teleporter_vm();
 				require([base_js_url + pagename + ".js"]);
 			});
 		} else {
 			_teleporter_vm();
-			Path.emit(Path._current_page, Path._current_location);
+			Path.emit(pathname, Path._current_location);
 		}
 	};
 	//路由启动器
@@ -905,17 +914,18 @@ _can_history_pushState = !!history.pushState;
 		//一级路由
 		Path.jSouperRoute({
 			href: loc.href,
-			html: "/app-pages/",
-			js: "/js/app-pages/",
+			html: "/app-pages/pages/",
+			js: "/app-pages/js/",
+			css: "/app-pages/css/",
 			prefix: "/", //URL-pathname中无用的前缀部分，用来过滤href得出pagename
 			tel: "main",
 			default: "main",
 			pagename_handler: function(pagename) { //二次处理pagename
 				return jSouper.$.lst(pagename, ".") || pagename;
 			},
+			index: 0,
 			vm: App
 		});
-		Path.emit("__change__", Path._current_location);
 	};
 	//默认路由触发器
 	Path.emitDefaultOnload = function() {
@@ -925,16 +935,30 @@ _can_history_pushState = !!history.pushState;
 			href: location.href.replace(location.origin, ""),
 		});
 	};
+	//注册路由
+	Path.registerjSouperRoute = function(pathname, cb) {
+		//Path.on被触发Path.emit，Path.jSouperRoute也会触发Path.emit，不加锁的话，可能造成死循环
+		var _emit_lock_ = false;
+		Path.on(pathname, function() {
+			if (_emit_lock_) {
+				return;
+			}
+			_emit_lock_ = true;
+			var route_options = cb.apply(this, arguments);
+			Path.jSouperRoute(route_options);
+			_emit_lock_ = false;
+		});
+	};
 	define("Path", Path);
 }());
 /*
  * 加载核心依赖
  * 应用程序启动
  */
-$('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', 'template/xmp.css'));
+$('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/template/xmp.css'));
 $.when(
-	$.get("template/xmp.html"),
-	$.getScript("template/xmp.js")
+	$.get("/template/xmp.html"),
+	$.getScript("/template/xmp.js")
 ).done(function(xmp_html_xhr) {
 	jSouper.parse(xmp_html_xhr[0]);
 	jSouper.ready(function() {

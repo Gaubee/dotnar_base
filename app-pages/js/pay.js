@@ -35,7 +35,7 @@
 	App.set("$Event.cancel_ach_success", function(vm, result) {
 		Path.jump("main.html");
 	});
-	Path.on("/__basename__", function(_current_location) {
+	Path.on("/__basename__.html", function(_current_location) {
 		var queryString = _current_location.query;
 		var ach_id = queryString.get("ach_id");
 		console.log(ach_id);

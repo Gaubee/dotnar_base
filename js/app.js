@@ -400,7 +400,7 @@ server_url = "http://localhost:6520/";
 (function() {
 	var _confirm = window.confirm;
 	window.native_confirm = _confirm;
-	window.confirm = window.myConfirm = function(str, true_cb, false_cb) {
+	window.confirm = window.myConfirm = window.my_confirm = function(str, true_cb, false_cb) {
 		var res = _confirm(str);
 		if (res) {
 			true_cb && true_cb();
@@ -482,7 +482,7 @@ server_url = "http://localhost:6520/";
 		info: "#1ba1e2",
 		lightWhite: "#f6f5ec"
 	};
-	window.alert = window.myAlert = function(type, alert_str) {
+	window.alert = window.myAlert  = window.my_alert = function(type, alert_str) {
 		var args = arguments;
 		var result;
 		if (args.length === 1) {

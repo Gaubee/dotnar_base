@@ -155,87 +155,89 @@ customTagsInit["img-uploader"] = function(vm) {
 
 	vm.set("$CPrivate.$Cache.text", "初始化中");
 	inputNode.disabled = true;
+	require(["localResizeIMG"], function() {
 
-	function _set_url(url) {
-		var _bind_input_key = uploaderNode.getAttribute("input-key");
-		if (_bind_input_key) {
-			vm.set(_bind_input_key, url);
-		}
-		//显示预览
-		_show_preview(url);
-	}
-	var _ti;
-
-	function _show_preview(url) {
-		clearInterval(_ti);
-		//是否在控件上显示图片
-		var _one_way = uploaderNode.getAttribute("one-way");
-		if (_one_way != "true") {
-			vm.set("$CPrivate.$Cache.img_url", url);
-			if (!uploaderNode.clientWidth) {
-				_ti = setInterval(function() {
-					_show_preview(url)
-				}, 200);
-				//中断
-				return;
+		function _set_url(url) {
+			var _bind_input_key = uploaderNode.getAttribute("input-key");
+			if (_bind_input_key) {
+				vm.set(_bind_input_key, url);
 			}
-			vm.set("$CPrivate.$Cache.img_width", uploaderNode.clientWidth);
-			vm.set("$CPrivate.$Cache.img_height", uploaderNode.clientHeight);
+			//显示预览
+			_show_preview(url);
 		}
-	}
+		var _ti;
 
-	function _set_status(value) {
-		var _upload_status = uploaderNode.getAttribute("status");
-		_upload_status && vm.set(_upload_status, value);
-		vm.set("$CPrivate.$Cache.uploading", value);
-	}
-
-	inputNode.removeAttribute("disabled");
-	jSouper.onElementPropertyChange(uploaderNode, "text", function(attr, text) {
-		vm.set("$CPrivate.$Cache.text", text || "点击选择文件上传");
-	}, true);
-	jSouper.onElementPropertyChange(uploaderNode, "url", function(attr, value) {
-		_show_preview(value)
-	}, true);
-	//压缩图片的配置与回调
-	var localResizeIMG_config = {
-		maxWidth: 1024,
-		quality: 1,
-		before: function() {
-			_set_status(true);
-		},
-		success: function(result) {
-			//使用BASE64上传
-			coAjax.post(server_url + "file/upload/image/base64", {
-				img_base64: result.base64
-			}, function(result) {
-				_set_status(false);
-				var img_url = "http://7xj7z0.com1.z0.glb.clouddn.com/" + result.result.key;
-				//给绑定的值赋值
-				_set_url(img_url);
-				//运行回调
-				var _upload_callback = uploaderNode.getAttribute("upload-callback");
-				if (_upload_callback) {
-					var _cb = vm.get(_upload_callback);
-					(_cb instanceof Function) && _cb(img_url);
+		function _show_preview(url) {
+			clearInterval(_ti);
+			//是否在控件上显示图片
+			var _one_way = uploaderNode.getAttribute("one-way");
+			if (_one_way != "true") {
+				vm.set("$CPrivate.$Cache.img_url", url);
+				if (!uploaderNode.clientWidth) {
+					_ti = setInterval(function() {
+						_show_preview(url)
+					}, 200);
+					//中断
+					return;
 				}
-			}, function(errorCode, xhr, errorMsg) {
-				_set_status(false);
-				alert("error", errorMsg);
-			}, function() {
-				_set_status(false);
-				alert("error", "网络异常，请重试！")
-			});
+				vm.set("$CPrivate.$Cache.img_width", uploaderNode.clientWidth);
+				vm.set("$CPrivate.$Cache.img_height", uploaderNode.clientHeight);
+			}
 		}
-	};
-	//动态修改配置
-	jSouper.onElementPropertyChange(uploaderNode, "max-width", function(attr, value) {
-		var _maxWidth = +uploaderNode.getAttribute("max-width");
-		isNaN(_maxWidth) && (_maxWidth = 1024);
-		localResizeIMG_config.maxWidth = _maxWidth;
-	}, true);
-	$inputNode = $(inputNode);
-	$inputNode.localResizeIMG(localResizeIMG_config);
+
+		function _set_status(value) {
+			var _upload_status = uploaderNode.getAttribute("status");
+			_upload_status && vm.set(_upload_status, value);
+			vm.set("$CPrivate.$Cache.uploading", value);
+		}
+
+		inputNode.removeAttribute("disabled");
+		jSouper.onElementPropertyChange(uploaderNode, "text", function(attr, text) {
+			vm.set("$CPrivate.$Cache.text", text || "点击选择文件上传");
+		}, true);
+		jSouper.onElementPropertyChange(uploaderNode, "url", function(attr, value) {
+			_show_preview(value)
+		}, true);
+		//压缩图片的配置与回调
+		var localResizeIMG_config = {
+			maxWidth: 1024,
+			quality: 1,
+			before: function() {
+				_set_status(true);
+			},
+			success: function(result) {
+				//使用BASE64上传
+				coAjax.post(appConfig.other.upload_base64_image, {
+					img_base64: result.base64
+				}, function(result) {
+					_set_status(false);
+					var img_url = appConfig.img_server_url + result.result.key;
+					//给绑定的值赋值
+					_set_url(img_url);
+					//运行回调
+					var _upload_callback = uploaderNode.getAttribute("upload-callback");
+					if (_upload_callback) {
+						var _cb = vm.get(_upload_callback);
+						(_cb instanceof Function) && _cb(img_url);
+					}
+				}, function(errorCode, xhr, errorMsg) {
+					_set_status(false);
+					alert("error", errorMsg);
+				}, function() {
+					_set_status(false);
+					alert("error", "网络异常，请重试！")
+				});
+			}
+		};
+		//动态修改配置
+		jSouper.onElementPropertyChange(uploaderNode, "max-width", function(attr, value) {
+			var _maxWidth = +uploaderNode.getAttribute("max-width");
+			isNaN(_maxWidth) && (_maxWidth = 1024);
+			localResizeIMG_config.maxWidth = _maxWidth;
+		}, true);
+		$inputNode = $(inputNode);
+		$inputNode.localResizeIMG(localResizeIMG_config);
+	});
 
 
 	vm.set("$CPrivate.$Event.show_mark", function() {

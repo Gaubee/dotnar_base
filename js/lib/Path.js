@@ -205,6 +205,7 @@ window._can_history_pushState = !!history.pushState;
 
 		//current_location
 		Path._current_page = base_prefix_url + pagename;
+		debugger
 		var _current_location = Path._current_location || (Path._current_location = {
 			pagename: []
 		});

@@ -19,7 +19,7 @@
  * 应用程序启动
  */
 require(["r_css!/template/xmp.css"]);
-require(["r_text!/template/xmp.html","/template/xmp.js"],function(xmp_html){
+require(["r_text!/template/xmp.html", "/template/xmp.js"], function(xmp_html) {
 	jSouper.parse(xmp_html);
 	jSouper.ready(function() {
 		//初始化应用程序
@@ -39,6 +39,9 @@ require(["r_text!/template/xmp.html","/template/xmp.js"],function(xmp_html){
 			window.addEventListener("popstate", Path.emitDefaultOnload);
 		}
 		$app = null;
+
+		//初始化路由
 		Path.emitDefaultOnload();
+
 	});
 });

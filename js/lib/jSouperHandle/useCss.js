@@ -57,7 +57,8 @@
 		}
 	}
 	jSouper.registerHandle("useCss", function(css_link, match_pagename) {
-		console.log("match_pagename:", match_pagename)
+		debugger
+		console.log("Path._current_location:", Path._current_location)
 		var id = this._id;
 		var use_css_config;
 		css_link = css_link ? Path.getPathname(css_link) : "";

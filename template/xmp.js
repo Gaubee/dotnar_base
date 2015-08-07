@@ -1,4 +1,5 @@
 var customTagsInit = jSouper.customTagsInit;
+var modulesInit = jSouper.modulesInit;
 
 var _is_ueditor_css_load = false;
 customTagsInit["ueditor"] = function(vm) {
@@ -280,26 +281,25 @@ customTagsInit["href"] = function(vm) {
 };
 
 
-var modulesInit = jSouper.modulesInit;
 
-modulesInit["pagination"] = function(vm) {
-	var paginationNode = vm.getOneElementByTagName("pagination");
+customTagsInit["pagination2"] = function(vm) {
+	var paginationNode = vm.getOneElementByTagName("pagination2");
 	jSouper.onElementPropertyChange(paginationNode, "page-num", function(attr, value) {
 		vm.set("_number_list", new Array(~~value));
 	}, true);
-	vm.set("$Private.$Event.first_page", function() {
-		routie.setQuery("page", 0)
+	vm.set("$CPrivate.$Event.first_page", function() {
+		Path.setQuery("page", 0)
 	});
-	vm.set("$Private.$Event.jump_page", function(e, cvm) {
-		routie.setQuery("page", cvm.get("$Index"))
+	vm.set("$CPrivate.$Event.jump_page", function(e, cvm) {
+		Path.setQuery("page", cvm.get("$Index"))
 	});
-	vm.set("$Private.$Event.end_page", function(e, cvm) {
-		routie.setQuery("page", vm.get("total_page"))
+	vm.set("$CPrivate.$Event.end_page", function(e, cvm) {
+		Path.setQuery("page", vm.get("total_page"))
 	});
-	vm.set("$Private.$Event.pre_page", function() {
-		routie.setQuery("page", ~~routie.getQuery("page") - 1)
+	vm.set("$CPrivate.$Event.pre_page", function() {
+		Path.setQuery("page", ~~Path.getQuery("page") - 1)
 	});
-	vm.set("$Private.$Event.next_page", function() {
-		routie.setQuery("page", ~~routie.getQuery("page") + 1)
+	vm.set("$CPrivate.$Event.next_page", function() {
+		Path.setQuery("page", ~~Path.getQuery("page") + 1)
 	});
 };

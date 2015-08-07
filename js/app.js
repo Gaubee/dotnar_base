@@ -18,35 +18,9 @@
  * 加载核心依赖
  * 应用程序启动
  */
-// require(["r_css!/template/xmp.css"]);
-// require(["r_text!/template/xmp.html","/template/xmp.js"],function(xmp_html){
-// 	jSouper.parse(xmp_html);
-// 	jSouper.ready(function() {
-// 		//初始化应用程序
-// 		jSouper.app({
-// 			Id: "jSouperApp",
-// 			Data: {
-// 				bus_info: busInfo,
-// 				config: appConfig
-// 			}
-// 		});
-// 		var $app = $("#jSouperApp");
-// 		$app.removeClass("hidden") //显示App
-// 		if (_can_history_pushState) {
-// 			window.addEventListener("popstate", Path.emitDefaultOnload);
-// 		}
-// 		$app = null;
-// 		Path.emitDefaultOnload();
-// 		// App.set("$Cache.zzzz","css/test.css");
-// 	});
-// });
-debugger
-$('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/template/xmp.css'));
-$.when(
-	$.get("/template/xmp.html"),
-	$.getScript("/template/xmp.js")
-).done(function(xmp_html_xhr) {
-	jSouper.parse(xmp_html_xhr[0]);
+require(["r_css!/template/xmp.css"]);
+require(["r_text!/template/xmp.html","/template/xmp.js"],function(xmp_html){
+	jSouper.parse(xmp_html);
 	jSouper.ready(function() {
 		//初始化应用程序
 		jSouper.app({
@@ -56,6 +30,9 @@ $.when(
 				config: appConfig
 			}
 		});
+		//加载通用模块
+		require(["/app-pages/js/_common.js"]);
+
 		var $app = $("#jSouperApp");
 		$app.removeClass("hidden") //显示App
 		if (_can_history_pushState) {
@@ -63,8 +40,5 @@ $.when(
 		}
 		$app = null;
 		Path.emitDefaultOnload();
-		// App.set("$Cache.zzzz","css/test.css");
 	});
-}).fail(function(argument) {
-	console.error(arguments);
 });

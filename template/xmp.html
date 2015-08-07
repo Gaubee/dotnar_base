@@ -33,17 +33,25 @@
 
 
 <!-- 分页控件 -->
-<xmp type="template" name="pagination">
-    <pagination class="pure-g" page-num="{{$This.total_page}}">
-        <div class="pure-u-1-5">
-            <span>当前位置：第<b>{{$This.page+1}}</b>页</span>
+<xmp type="tag" name="pagination2">
+   <pagination2 ${__all_attrs__}>
+        <div class="page-info">
+            <span>当前位置：第<b>{{${page-info}.page+1}}</b>页</span>
         </div>
-        <div event-click="{{'$Private.$Event.pre_page'}}" class="pure-button pure-u-1-24 {{$This.page==0&&'hidden'}}"><i class="fa fa-chevron-left"></i></div>
-        {{#each $This._number_list}}
-        <div event-click="{{'$Caller.$Private.$Event.jump_page'}}" class="pure-button pure-u-1-24 {{$Caller.$This.page==$Index&&'pure-button-active'}}">{{$Index+1}}</div>
-        {{/each}}
-        <div event-click="{{'$Private.$Event.next_page'}}" class="pure-button pure-u-1-24 {{$This.page+1>=$This.total_page&&'hidden'}}"><i class="fa fa-chevron-right"></i></div>
-    </pagination>
+        <div 
+         event-click="{{'$CPrivate.$Event.pre_page'}}" 
+         class="pre-page {{${page-info}.page==0&&'disabled'}}">&lt;</div>
+        <div class="pages">
+            {{#each ${page-info}._number_list}}
+            <div
+             event-click="{{'$Caller.$CPrivate.$Event.jump_page'}}" 
+             class="page {{$Top.${page-info}.page==$Index&&'current_page'}}">{{$Index+1}}</div>
+            {{/each}}
+        </div>
+        <div 
+         event-click="{{'$CPrivate.$Event.next_page'}}" 
+         class="next-page {{${page-info}.page+1>=${page-info}.total_page&&'disabled'}}">&gt;</div>
+    </pagination2>
 </xmp>
 
 <!-- 图片上传控件 -->

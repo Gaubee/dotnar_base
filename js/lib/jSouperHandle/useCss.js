@@ -22,7 +22,7 @@
 	};
 
 	function _load_css_link(use_css_config) {
-		if (use_css_config.pagename.exec(Path._current_page)) { //匹配成功
+		if (use_css_config.pagename.exec(Path._current_location.pathname)) { //匹配成功
 			if (!use_css_config.load) { //未下载，直接下载使用并缓存
 				use_css_config.id = this._id;
 				use_css_config.load = true; //锁定
@@ -57,13 +57,14 @@
 		}
 	}
 	jSouper.registerHandle("useCss", function(css_link, match_pagename) {
+		console.log("match_pagename:", match_pagename)
 		var id = this._id;
 		var use_css_config;
 		css_link = css_link ? Path.getPathname(css_link) : "";
 		//初始化
 		if (!(use_css_config = USE_CSS_MAP[id]) && !USE_CSS_MAP.hasOwnProperty(id)) {
 			use_css_config = (USE_CSS_MAP[id] = {
-				pagename: Path.pathToRegexp(match_pagename || Path._current_page),
+				pagename: Path.pathToRegexp(match_pagename || Path._current_location.pathname),
 				css_link: css_link,
 				style_id: this.vmName
 			});

@@ -11,7 +11,6 @@
         <!-- <link rel="stylesheet" href="__dotnar_lib_base_url__/css/normalize.css">
         <link rel="stylesheet" href="__dotnar_lib_base_url__/css/font-awesome.min.css"> -->
         <!-- <link rel="stylesheet" href="__dotnar_lib_base_url__/css/fontello.css"> -->
-        <link rel="stylesheet" href="/css/app.css">
         <script> appConfig = <$ appConfig|tojson $>; </script>
         <script> busInfo = <$ busInfo|tojson $>; </script>
         <script type="text/javascript" src="__dotnar_lib_base_url__/js/lib/require.min.js"></script>
@@ -28,7 +27,7 @@
                 }
             }
         });
-        require(["r_css!/css/mobile.main.css"]);
+        require(["r_css!/css/app.css"]);
         require(["app"], function(argument) {
             require(["/app-pages/js/top.js"]);
             closePageLoading();
@@ -41,6 +40,7 @@
             <div class="body _topblock">
                 {{#teleporter "main"}}
             </div>
+            {{#include "/app-pages/pages/bottom.html"}}
         </div>
         <% include "loader/ios.html" %>
     </body>

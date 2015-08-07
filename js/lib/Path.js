@@ -128,7 +128,7 @@ window._can_history_pushState = !!history.pushState;
 		} else {
 			delete qs.queryHash[key];
 		}
-		Path.jump(qs.toSting(_current_location.pathname));
+		Path.jump(qs.toString(_current_location.pathname));
 	};
 	Path.getQuery = function(key) {
 		return Path._current_location.query.get(key);

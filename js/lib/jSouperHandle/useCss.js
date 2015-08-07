@@ -56,8 +56,16 @@
 			}
 		}
 	}
-	jSouper.registerHandle("useCss", function(css_link, match_pagename) {
-		debugger
+	jSouper.registerHandle("useCss", function _use_css(css_link, match_pagename) {
+		// debugger
+		// if (!Path._current_location) {
+		// 	//因为缓存问题导致运作流程有误
+		// 	var self = this;
+		// 	setTimeout(function() {
+		// 		_use_css.apply(self, arguments);
+		// 	});
+		// 	return "";
+		// }
 		console.log("Path._current_location:", Path._current_location)
 		var id = this._id;
 		var use_css_config;

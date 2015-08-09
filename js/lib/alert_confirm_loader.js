@@ -98,12 +98,21 @@
 			}
 		} else if (args.length >= 2) {
 			var time = (args[2] === undefined) ? 3000 : args[2];
-			var class_color = notify_color_map[type];
-			result = $.Notify({
-				style: {
+			if (typeof type === "object") {
+				var className = type.className;
+				var css_style = type.style;
+			} else {
+				var type_info = type.split(" ");
+				var class_color = notify_color_map[type_info.shift()];
+				var css_style = {
 					background: class_color,
 					color: "white"
-				},
+				};
+				var className = type_info.join(" ");
+			}
+			result = $.Notify({
+				style: css_style,
+				className: className,
 				content: alert_str,
 				timeout: time
 			});

@@ -120,6 +120,21 @@ window._can_history_pushState = !!history.pushState;
 			location.href = href;
 		}
 	}
+	//微信授权中转跳转
+	Path.wxJump = function(url) {
+		alert("info waiting", "努力跳转中……");
+		_aNode.href = url;
+		coAjax.post(appConfig.other.make_wx_short_url, {
+			url: _aNode.href
+		}, function(result) {
+			var short_url = result.result;
+			var wx_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wx_config.appId +
+				"&redirect_uri=" + encodeURIComponent("http://api.dotnar.com/wx/authorize/notify_url") +
+				"&response_type=code&scope=snsapi_userinfo&state=" + encodeURIComponent(short_url) +
+				"#wechat_redirect";
+			location.href = wx_url;
+		});
+	};
 	Path.setQuery = function(key, value) {
 		var _current_location = Path._current_location;
 		var qs = _current_location.query;
@@ -205,7 +220,7 @@ window._can_history_pushState = !!history.pushState;
 
 		//current_location
 		Path._current_page = base_prefix_url + pagename;
-		debugger
+
 		var _current_location = Path._current_location || (Path._current_location = {
 			pagename: []
 		});
@@ -273,6 +288,6 @@ window._can_history_pushState = !!history.pushState;
 		});
 	};
 
-	<% import "js/lib/exports.js" as exports %>
+	<%import "js/lib/exports.js" as exports %>
 	<$ exports.browser("Path", "Path") $>
 }());

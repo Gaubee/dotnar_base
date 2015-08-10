@@ -10,6 +10,10 @@
 		});
 		return function(data, textStatus, jqXHR) {
 			switch (data.type) {
+				case "string":
+					data.result = data.toString;
+					success.apply(this, arguments);
+					break;
 				case "json":
 					try {
 						var result = $.parseJSON(data.toString);

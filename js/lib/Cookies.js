@@ -1,3 +1,4 @@
+//
 /*
  * Cookies.js - 1.2.1
  * https://github.com/ScottHamper/Cookies
@@ -144,6 +145,7 @@
 
     var cookiesExport = typeof global.document === 'object' ? factory(global) : factory;
 
-    <% import "js/lib/exports.js" as exports %>
-    <$ exports.browser("Cookies", "cookiesExport") $>
+    //注释避免格式化问题
+    //Nunjucks <% import "js/lib/exports.js" as exports %>
+    //Nunjucks <$ exports.browser("Cookies", "cookiesExport") $>
 })(typeof window === 'undefined' ? this : window);

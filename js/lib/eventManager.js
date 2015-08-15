@@ -1,3 +1,4 @@
+//
 /*
  * 事件管理器
  */
@@ -75,6 +76,6 @@
 	eventManager._eventCache = _eventCache;
 	eventManager._eventMap = _eventMap;
 
-	<% import "js/lib/exports.js" as exports %>
-	<$ exports.browser("eventManager", "eventManager") $>
+	//Nunjucks <% import "js/lib/exports.js" as exports %>
+	//Nunjucks <$ exports.browser("eventManager", "eventManager") $>
 }());

@@ -1,3 +1,4 @@
+//
 jSouper.registerHandle("#Fixed", function(value, fixnum) {
 	fixnum = ~~fixnum || 2;
 	value = parseFloat(value) || 0;

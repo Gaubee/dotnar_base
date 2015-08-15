@@ -1,3 +1,4 @@
+//
 jSouper.registerHandle("#Time", function(time, format) {
 	time = (+time == time) ? +time : time;
 	var date = moment(time);

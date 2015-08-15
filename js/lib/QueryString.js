@@ -1,3 +1,4 @@
+//
 /*
  * url-query解析器
  */
@@ -51,6 +52,6 @@
 		}
 	};
 
-	<% import "js/lib/exports.js" as exports %>
-	<$ exports.browser("QueryString", "QueryString") $>
+	//Nunjucks <% import "js/lib/exports.js" as exports %>
+	//Nunjucks <$ exports.browser("QueryString", "QueryString") $>
 }());

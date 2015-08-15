@@ -1,5 +1,6 @@
+//
 (function() { 
-	<% import "js/lib/exports.js" as exports %>
+	//Nunjucks <% import "js/lib/exports.js" as exports %>
 	/*
 	 * 数据解析工具
 	 */
@@ -49,7 +50,7 @@
 		};
 	};
 
-	<$ exports.browser("dataFormat", "dataFormat") $>
+	//Nunjucks <$ exports.browser("dataFormat", "dataFormat") $>
 
 	/*
 	 * 基于jQ的跨域ajax工具函数
@@ -162,7 +163,7 @@
 	};
 	var coAjax = ajax;
 
-	<$ exports.browser("coAjax", "coAjax") $>
+	//Nunjucks <$ exports.browser("coAjax", "coAjax") $>
 
 	/*
 	 * 基于SockJS的web-sock通讯
@@ -263,5 +264,5 @@
 	};
 
 	
-	<$ exports.browser("serverNotify", "serverNotify") $>
+	//Nunjucks <$ exports.browser("serverNotify", "serverNotify") $>
 }());

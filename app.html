@@ -13,6 +13,7 @@
         <!-- <link rel="stylesheet" href="__dotnar_lib_base_url__/css/fontello.css"> -->
         <script> appConfig = <$ appConfig|tojson $>; </script>
         <script> busInfo = <$ busInfo|tojson $>; </script>
+        <!-- <script src="js/silence.js" ></script> -->
         <script type="text/javascript" src="__dotnar_lib_base_url__/js/lib/require.min.js"></script>
         <script type="text/javascript" src="__dotnar_lib_base_url__/js/require.config.v3.js"></script>
         <script type="text/javascript" src="__dotnar_lib_base_url__/js/require.config.v3.bus.js"></script>
@@ -28,16 +29,17 @@
             }
         });
         require(["r_css!/css/app.css"]);
-        require(["app"], function(argument) {
+        require(["app"], function() {
             require(["/app-pages/js/top.js"]);
             closePageLoading();
         });
         </script>
     </head>
     <body>
-        <div id="jSouperApp" class="hidden">
+        <div id="jSouperApp" style="display:none;">
+{{setTitle (Path.document_title||"") + "【<$ busInfo.info.title $>】", "*"}}
             {{#include "/app-pages/pages/top.html"}}
-            <div class="body _topblock">
+            <div class="body">
                 {{#teleporter "main"}}
             </div>
             {{#include "/app-pages/pages/bottom.html"}}

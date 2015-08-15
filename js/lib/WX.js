@@ -1,3 +1,4 @@
+//
 define("WX", ["wx_core"], function(wx) {
 	var fun_list = [];
 	var ready = false;

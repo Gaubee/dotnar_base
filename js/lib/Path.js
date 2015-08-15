@@ -1,3 +1,4 @@
+//
 /*
  * Path 页面URL处理器
  */
@@ -176,6 +177,34 @@ window._can_history_pushState = !!history.pushState;
 	};
 	//通用路由模块，与jSouper进行耦合
 	Path.jSouper_VMS = {};
+	Path.refreshCurrentLocation = function(href) {
+		var _current_location = Path._current_location || (Path._current_location = {});
+		if (_current_location.href === href) {
+			return _current_location;
+		}
+
+		var pathname = href;
+		var hash_index = pathname.indexOf("#");
+		var hash = "";
+		if (hash_index !== -1) {
+			hash = pathname.substr(hash_index);
+			pathname = pathname.substr(0, hash_index);
+		}
+		var search_index = pathname.indexOf("?");
+		var search = "";
+		if (search_index !== -1) {
+			search = pathname.substr(search_index);
+			pathname = pathname.substr(0, search_index);
+		}
+
+		_current_location.pathname = pathname;
+		_current_location.hash = hash;
+		_current_location.search = search;
+		_current_location.href = href;
+		_current_location.query ? _current_location.query.init(search) : (_current_location.query = QueryString(search))
+
+		return _current_location;
+	};
 
 	Path.jSouperRoute = function(options) {
 		if (Path._current_location) {
@@ -193,19 +222,9 @@ window._can_history_pushState = !!history.pushState;
 		var current_vm = options.vm = options.vm || App;
 		Path.options = options;
 
-		var pathname = href;
-		var hash_index = pathname.indexOf("#");
-		var hash = "";
-		if (hash_index !== -1) {
-			hash = pathname.substr(hash_index);
-			pathname = pathname.substr(0, hash_index);
-		}
-		var search_index = pathname.indexOf("?");
-		var search = "";
-		if (search_index !== -1) {
-			search = pathname.substr(search_index);
-			pathname = pathname.substr(0, search_index);
-		}
+		var _current_location = Path.refreshCurrentLocation(href);
+
+		var pathname = _current_location.pathname;
 
 		if (base_prefix_url.substr(-1) !== "/") { //end with "/"
 			console.warn("jSouperRoute prefix 必须以'/'结尾");
@@ -219,20 +238,13 @@ window._can_history_pushState = !!history.pushState;
 		}
 
 		//current_location
-		Path._current_page = base_prefix_url + pagename;
-
-		var _current_location = Path._current_location || (Path._current_location = {
-			pagename: []
-		});
-		_current_location.pathname = pathname;
-		_current_location.hash = hash;
-		_current_location.search = search;
-		_current_location.href = href;
-		_current_location.query ? _current_location.query.init(search) : (_current_location.query = QueryString(search))
+		var _current_page = Path._current_page = base_prefix_url + pagename;
 
 		function _teleporter_vm() {
 			current_vm.teleporter(rightVM, tele_name);
-			App.set("$Cache.current_location", _current_location);
+			App.set("Path.current_location", _current_location);
+			App.set("Path.current_page", _current_page);
+			options.stop_emit || Path.emit(pathname, Path._current_location);
 		};
 		var xmp_url = base_HTML_url + pagename + ".html";
 		var rightVM = _viewModules[xmp_url];
@@ -244,7 +256,6 @@ window._can_history_pushState = !!history.pushState;
 			});
 		} else {
 			_teleporter_vm();
-			Path.emit(pathname, Path._current_location);
 		}
 	};
 	//路由启动器
@@ -288,6 +299,8 @@ window._can_history_pushState = !!history.pushState;
 		});
 	};
 
-	<%import "js/lib/exports.js" as exports %>
-	<$ exports.browser("Path", "Path") $>
+	Path.refreshCurrentLocation(location.href);
+
+	//Nunjucks <% import "js/lib/exports.js" as exports %>
+	//Nunjucks <$ exports.browser("Path", "Path") $>
 }());

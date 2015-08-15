@@ -1,7 +1,7 @@
-// Avoid `console` errors in browsers that lack a console.
+// 控制台不打印任何信息
 (function() {
     var method;
-    var noop = function () {};
+    var noop = function() {};
     var methods = [
         'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
         'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
@@ -9,7 +9,7 @@
         'timeline', 'timelineEnd', 'timeStamp', 'trace', 'warn'
     ];
     var length = methods.length;
-    var console = (window.console = window.console || {});
+    var console = window.console = {};
 
     while (length--) {
         method = methods[length];
@@ -20,5 +20,3 @@
         }
     }
 }());
-
-// Place any jQuery/helper plugins in here.

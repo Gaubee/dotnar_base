@@ -35,20 +35,21 @@ require(["r_text!/template/xmp.html", "/template/xmp.js"], function(xmp_html) {
 		});
 
 		var appNode = document.getElementById("jSouperApp");
-		appNode.style.display = "block";//显示App
+		appNode.style.display = "block"; //显示App
 		if (_can_history_pushState) {
 			window.addEventListener("popstate", Path.emitDefaultOnload);
 		}
 
 		//初始化路由
 		Path.emitDefaultOnload();
+		eventManager.emit("!AppReady");
 
-//Nunjucks <% include "js/init/handle_query.js" %>
-//Nunjucks <% include "js/init/handle_history.js" %>
-//Nunjucks <% include "js/init/handle_collect.js" %>
-//Nunjucks <% include "js/init/handle_loginer.js" %>
-//Nunjucks <% include "js/init/wx_share.js" %>
-//Nunjucks <% include "js/init/record_visitor.js" %>
+		//Nunjucks <% include "js/init/handle_query.js" %>
+		//Nunjucks <% include "js/init/handle_history.js" %>
+		//Nunjucks <% include "js/init/handle_collect.js" %>
+		//Nunjucks <% include "js/init/handle_loginer.js" %>
+		//Nunjucks <% include "js/init/wx_share.js" %>
+		//Nunjucks <% include "js/init/record_visitor.js" %>
 
 	});
 });

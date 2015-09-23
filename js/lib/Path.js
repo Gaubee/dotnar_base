@@ -131,7 +131,7 @@ window._can_history_pushState = !!history.pushState;
 			var short_url = result.result;
 			var wx_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wx_config.appId +
 				"&redirect_uri=" + encodeURIComponent("http://api.dotnar.com/wx/authorize/notify_url") +
-				"&response_type=code&scope=snsapi_userinfo&state=" + encodeURIComponent(short_url) +
+				"&response_type=code&scope=snsapi_userinfo&state=" + encodeURIComponent(busInfo._id + "|" + short_url) +
 				"#wechat_redirect";
 			location.href = wx_url;
 		});

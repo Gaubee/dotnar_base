@@ -1,6 +1,9 @@
 //
-jSouper.registerHandle("#Time", function(time, format) {
+jSouper.registerHandle("#Time", function(time, format, forever) {
 	time = (+time == time) ? +time : time;
+	if (time == Number.MAX_VALUE) {
+		return forever || "永久";
+	};
 	var date = moment(time);
 	if (format) {
 		return date.format(format);

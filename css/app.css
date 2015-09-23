@@ -295,13 +295,3 @@ textarea {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 }
-
-.loder_preview{
-    width: 100%;
-    height: 100%;
-    background-size: 100%;
-    background-repeat: no-repeat;
-}
-.loder_preview  img{
-    width: 100%;
-}

@@ -31,12 +31,12 @@
 
 	function _login_err(errorCode) {
 		// alert("用户未登录");
-		var muse_login_pages = {
-			"#default/sign_in": 1,
-			"#default/cart": 1
+		var must_login_pages = {
+			"/user/cart": 1,
+			"/user/pay": 1
 		};
 		//未登录，不可进入个人页，强制跳转到登录页
-		if (muse_login_pages[location.pathname]) {
+		if (must_login_pages[Path._current_page]) {
 			Path.jump("/sign_in.html");
 		};
 	};

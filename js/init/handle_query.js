@@ -32,22 +32,22 @@ if (wx_openid) {
 	//保存到lib里面，确保跨页面使用
 	globalSet("WEIXIN_OPENID", wx_openid, function() {
 		alert("success", "微信用户授权成功");
-		eventManager.is(App.get("loginer"), "getLoginer", function() {
-			//如果已经绑定微信账号，就不管，要就去个人中心实现“重新绑定”
-			if (App.get("loginer.info.weixin_unionid")) {
-				return;
-			}
-			myConfirm("是否将当前登录账号与微信账号做绑定？", function() {
-				coAjax.put(appConfig.user.bind_weixin_account_by_open_id, {
-					openid: wx_openid
-				}, function(result) {
-					App.set("loginer", result.result);
-					alert("success", "微信号绑定成功，下次无需手动登录");
-				});
-			}, function() {
-				alert("绑定已经取消");
-			});
-		});
+		// eventManager.is(App.get("loginer"), "getLoginer", function() {
+		// 	//如果已经绑定微信账号，就不管，要就去个人中心实现“重新绑定”
+		// 	if (App.get("loginer.info.weixin_unionid")) {
+		// 		return;
+		// 	}
+		// 	myConfirm("是否将当前登录账号与微信账号做绑定？", function() {
+		// 		coAjax.put(appConfig.user.bind_weixin_account_by_open_id, {
+		// 			openid: wx_openid
+		// 		}, function(result) {
+		// 			App.set("loginer", result.result);
+		// 			alert("success", "微信号绑定成功，下次无需手动登录");
+		// 		});
+		// 	}, function() {
+		// 		alert("绑定已经取消");
+		// 	});
+		// });
 	});
 	Path.setQuery("WEIXIN_OPENID", "");
 }
